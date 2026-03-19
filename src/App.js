@@ -30,6 +30,36 @@ function App() {
     }
   }, [playerId]);
 
+  useEffect(() => {
+    if (!('serviceWorker' in navigator) || !('PushManager' in window)) return;
+
+    navigator.serviceWorker.register('/service-worker.js').then(async (reg) => {
+      const permission = await Notification.requestPermission();
+      if (permission !== 'granted') return;
+
+      let sub = await reg.pushManager.getSubscription();
+      if (!sub) {
+        const res = await fetch(`${BACKEND}/api/vapid-public-key`);
+        const { key } = await res.json();
+        const appServerKey = urlBase64ToUint8Array(key);
+        sub = await reg.pushManager.subscribe({ userVisibleOnly: true, applicationServerKey: appServerKey });
+      }
+
+      await fetch(`${BACKEND}/api/subscribe`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ subscription: sub })
+      });
+    }).catch(err => console.error('SW registration failed:', err));
+  }, []);
+
+  function urlBase64ToUint8Array(base64String) {
+    const padding = '='.repeat((4 - base64String.length % 4) % 4);
+    const base64 = (base64String + padding).replace(/-/g, '+').replace(/_/g, '/');
+    const rawData = window.atob(base64);
+    return Uint8Array.from([...rawData].map(c => c.charCodeAt(0)));
+  }
+
   const loadPlayer = async () => {
     try {
       const res = await fetch(`${BACKEND}/api/players/${playerId}`);
@@ -495,6 +525,7 @@ function App() {
                       
                       {!match.completed ? (
                         <input
+                          id={`score1-${idx}`}
                           type="number"
                           defaultValue={0}
                           onBlur={(e) => {
@@ -531,6 +562,10 @@ function App() {
                           id={`score2-${idx}`}
                           type="number"
                           defaultValue={0}
+                          onBlur={(e) => {
+                            const score1 = parseInt(document.getElementById(`score1-${idx}`).value) || 0;
+                            updateScore(idx, score1, parseInt(e.target.value) || 0);
+                          }}
                           style={{
                             width:'60px',
                             padding:'8px',
