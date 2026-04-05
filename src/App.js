@@ -420,8 +420,10 @@ function App() {
                 </div>
 
                 {/* Add Guest Players */}
-                <div style={{fontSize:'12px',fontWeight:'700',color:'var(--muted)',letterSpacing:'0.5px',marginBottom:'12px'}}>ADD GUEST PLAYERS</div>
-                <div style={{display:'flex',gap:'8px',marginBottom:'16px'}}>
+                <div style={{padding:'16px',background:'rgba(0,201,167,0.06)',border:'1px solid var(--accent)',borderRadius:'12px',marginBottom:'24px'}}>
+                  <div style={{fontSize:'12px',fontWeight:'700',color:'var(--accent)',letterSpacing:'0.5px',marginBottom:'12px'}}>+ ADD GUEST PLAYERS</div>
+                  <div style={{fontSize:'12px',color:'var(--muted)',marginBottom:'12px'}}>Add players by name — no account needed.</div>
+                <div style={{display:'flex',gap:'8px',marginBottom:'4px'}}>
                   <input
                     type="text"
                     placeholder="Guest player name"
@@ -436,6 +438,7 @@ function App() {
                   >
                     Add
                   </button>
+                </div>
                 </div>
 
                 {/* Player Selection */}
@@ -714,7 +717,7 @@ function App() {
             <div style={{fontSize:'24px',fontWeight:'700',color:'var(--text)',marginBottom:'24px'}}>⚙️ Settings</div>
             <div style={{padding:'16px',background:'var(--s2)',border:'1px solid var(--border)',borderRadius:'12px',marginBottom:'16px'}}>
               <div style={{fontSize:'14px',fontWeight:'600',color:'var(--text)',marginBottom:'8px'}}>App Version</div>
-              <div style={{fontSize:'12px',color:'var(--muted)'}}>Smash v1.1.0</div>
+              <div style={{fontSize:'12px',color:'var(--muted)'}}>Smash v1.1.0 — Custom scoring, guest players, session leaderboard</div>
             </div>
             <div style={{padding:'16px',background:'var(--s2)',border:'1px solid var(--border)',borderRadius:'12px'}}>
               <div style={{fontSize:'14px',fontWeight:'600',color:'var(--text)',marginBottom:'8px'}}>About</div>
